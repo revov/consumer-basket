@@ -4,6 +4,8 @@ import { parse } from 'pg-connection-string';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ENV } from './environment';
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
 
 const postgresConfig = parse(ENV.DATABASE_URL);
 
@@ -20,7 +22,9 @@ const postgresConfig = parse(ENV.DATABASE_URL);
       ssl: {
         rejectUnauthorized: false,
       },
+      entities: [User],
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
