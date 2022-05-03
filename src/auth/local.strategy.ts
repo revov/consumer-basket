@@ -6,17 +6,18 @@ import { AuthService, UserJwtPayload } from './auth.service';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
-    super();
+    super({
+      usernameField: 'password', // local strategy would not accept an empty username field, and since we have just one user we'll set the usernameField to be the same as the password
+    });
   }
 
   async validate(username: string, password: string): Promise<UserJwtPayload> {
-    const user = await this.authService.validateUser(username, password);
-    if (!user) {
+    const authenticationResult = await this.authService.validatePassword(
+      password,
+    );
+    if (!authenticationResult) {
       throw new UnauthorizedException();
     }
-    return {
-      sub: user.id,
-      username: user.username,
-    };
+    return {};
   }
 }

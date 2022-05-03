@@ -1,37 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/user.entity';
-import { UsersService } from '../users/users.service';
+import { compare } from 'bcrypt';
+import { ENV } from 'src/environment';
 
-export type UserJwtPayload = {
-  sub: number;
-  username: string;
-};
+export type UserJwtPayload = Record<string, never>;
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
 
-  async validateUser(
-    username: string,
-    pass: string,
-  ): Promise<Omit<User, 'password'>> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
+  async validatePassword(password: string): Promise<Record<string, never>> {
+    const authenticated = await compare(password, ENV.LOGIN_CREDENTIALS_HASH);
+
+    return authenticated ? {} : null;
   }
 
-  async login(user: User) {
-    const jwtPayload: UserJwtPayload = {
-      sub: user.id,
-      username: user.username,
-    };
+  async signJwt() {
+    const jwtPayload: UserJwtPayload = {};
 
     return {
       access_token: this.jwtService.sign(jwtPayload),
