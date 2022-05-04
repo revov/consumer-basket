@@ -5,7 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "cacheDirectories": ["node_modules", "client/node_modules"],
   "scripts": {
+    "heroku-postbuild": "rimraf dist && rimraf client/build && npm install --prefix ./client && npm run build --prefix ./client && nest build",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
