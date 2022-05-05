@@ -19,7 +19,7 @@ export class AuthService {
     const jwtPayload: UserJwtPayload = {};
 
     return {
-      access_token: this.jwtService.sign(jwtPayload),
+      accessToken: this.jwtService.sign(jwtPayload),
     };
   }
 }
