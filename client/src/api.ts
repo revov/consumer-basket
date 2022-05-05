@@ -6,8 +6,3 @@ axios.defaults.baseURL =
     : `api/`;
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
-
-const accessToken = localStorage.getItem('api_access_token');
-if (accessToken) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-}
