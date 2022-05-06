@@ -1,5 +1,4 @@
 import { CssBaseline } from '@mui/material';
-import { pink } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
