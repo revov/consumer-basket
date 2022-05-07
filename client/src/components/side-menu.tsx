@@ -7,12 +7,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CategoryIcon from '@mui/icons-material/Category';
-import { Link } from 'react-router-dom';
-import { Divider } from '@mui/material';
+import { matchPath, Link, useLocation } from 'react-router-dom';
+import { Divider, ListItemButton } from '@mui/material';
 
 const drawerWidth = 240;
 
 export function SideMenu() {
+  const location = useLocation();
+
   return (
     <Drawer
       variant="permanent"
@@ -25,13 +27,13 @@ export function SideMenu() {
       <Toolbar />
       <Box sx={{ overflow: 'auto' }}>
         <List>
-          <ListItem button component={Link} to="/products" key={'Products'}>
+          <ListItemButton component={Link} to="/products" selected={!!matchPath(location.pathname, '/products')} key={'Products'} >
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary={'Продукти'} />
-          </ListItem>
-          <ListItem button component={Link} to="/categories" key={'Categories'}>
+          </ListItemButton>
+          <ListItem button component={Link} to="/categories" selected={!!matchPath(location.pathname, '/categories')} key={'Categories'}>
             <ListItemIcon>
               <CategoryIcon />
             </ListItemIcon>
