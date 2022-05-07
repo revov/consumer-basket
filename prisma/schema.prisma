@@ -23,7 +23,8 @@ model Product {
   promoPrice           Decimal?
   store                String
   quantityInThePackage Decimal  @default(1)
-  category             Category @relation(fields: [categoryId], references: [id])
-  categoryId           String
-  history              String
+  category             Category? @relation(fields: [categoryId], references: [id])
+  categoryId           String?
+  date                 DateTime @db.Date
+  history              Json
 }

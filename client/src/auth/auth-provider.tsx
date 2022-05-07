@@ -13,12 +13,13 @@ export const AuthContext = createContext<AuthContextType>(null!);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const existingAccessToken = localStorage.getItem('api_access_token');
 
-  useEffect(() => {
+  // Need to perform this as a side effect,
+  // but if we do it with useEffect it will leave children with no token for their initial effects
+  useMemo(() => {
     if (existingAccessToken) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${existingAccessToken}`;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [existingAccessToken]);
 
   let [authenticated, setAuthenticated] = useState(!!existingAccessToken);
 
