@@ -27,13 +27,24 @@ export function SideMenu() {
       <Toolbar />
       <Box sx={{ overflow: 'auto' }}>
         <List>
-          <ListItemButton component={Link} to="/products" selected={!!matchPath(location.pathname, '/products')} key={'Products'} >
+          <ListItemButton
+            component={Link}
+            to="/products"
+            selected={!!matchPath(location.pathname, '/products')}
+            key={'Products'}
+          >
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary={'Продукти'} />
           </ListItemButton>
-          <ListItem button component={Link} to="/categories" selected={!!matchPath(location.pathname, '/categories')} key={'Categories'}>
+          <ListItem
+            button
+            component={Link}
+            to="/categories"
+            selected={!!matchPath(location.pathname, '/categories')}
+            key={'Categories'}
+          >
             <ListItemIcon>
               <CategoryIcon />
             </ListItemIcon>
