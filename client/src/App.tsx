@@ -10,6 +10,7 @@ import { Layout } from './components/layout';
 import { CategoriesRoute } from './routes/categories-route';
 import { LoginRoute } from './routes/login-route';
 import { LogoutRoute } from './routes/logout-route';
+import { SingleProductRoute } from './routes/single-product-route';
 import { ProductsRoute } from './routes/products-route';
 
 const queryClient = new QueryClient();
@@ -44,7 +45,25 @@ function App() {
                     </RequireAuth>
                   }
                 />
-                
+
+                <Route
+                  path="products/create"
+                  element={
+                    <RequireAuth>
+                      <SingleProductRoute isExisting={false} />
+                    </RequireAuth>
+                  }
+                />
+
+                <Route
+                  path="products/edit/:productId"
+                  element={
+                    <RequireAuth>
+                      <SingleProductRoute isExisting />
+                    </RequireAuth>
+                  }
+                />
+
                 <Route
                   path="categories"
                   element={
