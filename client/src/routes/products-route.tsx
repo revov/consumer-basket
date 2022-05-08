@@ -27,6 +27,11 @@ export function ProductsRoute() {
     undefined | ProductDto
   >(undefined);
 
+  const formatter = new Intl.NumberFormat('bg-BG', {
+    style: 'currency',
+    currency: 'BGN',
+  });
+
   return (
     <div>
       <Button
@@ -64,8 +69,8 @@ export function ProductsRoute() {
                 onClick={() => navigate(`edit/${product.id}`)}
               >
                 <TableCell>{product.name}</TableCell>
-                <TableCell align="right">{product.price}лв</TableCell>
-                <TableCell align="right">{product.promoPrice}лв</TableCell>
+                <TableCell align="right">{formatter.format(product.price as any)}</TableCell>
+                <TableCell align="right">{formatter.format(product.promoPrice as any)}</TableCell>
                 <TableCell>{product.quantityInThePackage}</TableCell>
                 <TableCell>{product.store}</TableCell>
                 <TableCell>{product.category?.name}</TableCell>

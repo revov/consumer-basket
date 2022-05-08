@@ -80,6 +80,7 @@ export function SingleProductRoute(props: Props) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
+                autoComplete='false'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -93,6 +94,7 @@ export function SingleProductRoute(props: Props) {
                 InputProps={{
                   endAdornment: <InputAdornment position="end">лв</InputAdornment>,
                 }}
+                autoComplete='false'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -106,6 +108,7 @@ export function SingleProductRoute(props: Props) {
                 InputProps={{
                   endAdornment: <InputAdornment position="end">лв</InputAdornment>,
                 }}
+                autoComplete='false'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -116,6 +119,7 @@ export function SingleProductRoute(props: Props) {
                 type="number"
                 fullWidth
                 inputProps={{ min: 0, step: 1 }}
+                autoComplete='false'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -124,6 +128,7 @@ export function SingleProductRoute(props: Props) {
                 value={store}
                 onChange={(e) => setStore(e.target.value)}
                 fullWidth
+                autoComplete='false'
               />
             </Grid>
             <Grid item xs={12} sm={6}>

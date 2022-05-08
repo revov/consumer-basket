@@ -5,5 +5,5 @@ interface Props {
 }
 
 export const DateRenderer = React.memo((props: Props) => {
-  return <>{new Date(props.dateAsIso8601).toLocaleDateString()}</>;
+  return <>{new Date(props.dateAsIso8601).toLocaleDateString('bg-BG')}</>;
 });
