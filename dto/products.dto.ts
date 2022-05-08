@@ -7,7 +7,7 @@ export interface CreateProductDto {
   promoPrice?: number;
   store: string;
   quantityInThePackage?: number;
-  categoryId: string;
+  categoryId?: string;
   date: string;
 }
 

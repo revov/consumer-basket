@@ -26,7 +26,7 @@ export function ProductsRoute() {
         sx={{ marginBottom: '10px' }}
         onClick={() => navigate('create')}
       >
-        Добави
+        Нов продукт
       </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, maxHeight: 800 }} stickyHeader>

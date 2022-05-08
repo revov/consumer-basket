@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import { useLoginMutation } from '../queries/login';
 
 interface AuthContextType {

@@ -17,14 +17,16 @@ model Category {
 }
 
 model Product {
-  id                   String   @id @default(uuid())
-  name                 String   @unique
+  id                   String    @id @default(uuid())
+  name                 String    @unique
   price                Decimal
   promoPrice           Decimal?
   store                String
-  quantityInThePackage Decimal  @default(1)
+  quantityInThePackage Decimal   @default(1)
   category             Category? @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  date                 DateTime @db.Date
+  date                 DateTime  @db.Date
   history              Json
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @default(now()) @updatedAt
 }

@@ -28,7 +28,7 @@ export class ProductsController {
         promoPrice: dto.promoPrice,
         store: dto.store,
         quantityInThePackage: dto.quantityInThePackage,
-        date: dto.date,
+        date: new Date(dto.date),
         categoryId: dto.categoryId,
         history: JSON.stringify([] as ProductHistoryItem[]),
       },
