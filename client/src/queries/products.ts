@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { CreateProductDto, ProductDto } from '../../../dto/products.dto';
 
 export function useProductsQuery() {
@@ -15,5 +15,19 @@ export function useCreateProductMutation() {
     axios
       .post('products/create', product)
       .then((response) => response.data),
+  );
+}
+
+export function useDeleteProductMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation((productId: string) =>
+    axios
+      .delete(`products/delete/${encodeURIComponent(productId)}`)
+      .then((response) => {
+        queryClient.invalidateQueries('products');
+        
+        return response.data;
+      }),
   );
 }

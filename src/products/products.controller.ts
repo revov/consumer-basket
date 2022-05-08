@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateProductDto } from 'dto/products.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PrismaService } from 'src/prisma.service';
@@ -31,6 +39,16 @@ export class ProductsController {
         date: new Date(dto.date),
         categoryId: dto.categoryId,
         history: JSON.stringify([] as ProductHistoryItem[]),
+      },
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('delete/:id')
+  async deleteProduct(@Param('id') id: string) {
+    return this.prisma.product.delete({
+      where: {
+        id: id,
       },
     });
   }

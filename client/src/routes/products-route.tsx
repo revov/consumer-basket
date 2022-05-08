@@ -1,5 +1,6 @@
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -9,13 +10,22 @@ import {
   TableRow,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { DateRenderer } from '../components/date-renderer';
-import { useProductsQuery } from '../queries/products';
+import { useDeleteProductMutation, useProductsQuery } from '../queries/products';
+import { ConfirmationDialog } from '../components/confirmation-dialog';
+import { useState } from 'react';
+import { ProductDto } from '../../../dto/products.dto';
 
 export function ProductsRoute() {
   const { data: products } = useProductsQuery();
+  const deleteProductMutation = useDeleteProductMutation();
   const navigate = useNavigate();
+
+  const [productForDeletion, setProductForDeletion] = useState<
+    undefined | ProductDto
+  >(undefined);
 
   return (
     <div>
@@ -39,6 +49,7 @@ export function ProductsRoute() {
               <TableCell>Магазин</TableCell>
               <TableCell>Категория</TableCell>
               <TableCell>Дата</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -61,11 +72,30 @@ export function ProductsRoute() {
                 <TableCell>
                   <DateRenderer dateAsIso8601={product.date} />
                 </TableCell>
+
+                <TableCell>
+                  <IconButton aria-label="delete" size="small" onClick={e => {
+                    e.stopPropagation();
+                    setProductForDeletion(product);
+                  }}>
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <ConfirmationDialog
+        open={!!productForDeletion}
+        text={`Сигурни ли сте, че искате да изтриете ${productForDeletion?.name} и цялата му история?`}
+        onCancel={() => setProductForDeletion(undefined)}
+        onConfirm={async () => {
+          await deleteProductMutation.mutateAsync(productForDeletion!.id);
+          setProductForDeletion(undefined);
+        }}
+      />
     </div>
   );
 }

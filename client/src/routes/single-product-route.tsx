@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Grid, Paper, TextField } from '@mui/material';
+import { Alert, Button, Grid, InputAdornment, Paper, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -64,6 +64,7 @@ export function SingleProductRoute(props: Props) {
             handleCreate();
           }
         }}
+        noValidate
       >
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={bg}>
           <Grid container spacing={3}>
@@ -89,6 +90,9 @@ export function SingleProductRoute(props: Props) {
                 type="number"
                 fullWidth
                 inputProps={{ min: 0 }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">лв</InputAdornment>,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -99,6 +103,9 @@ export function SingleProductRoute(props: Props) {
                 type="number"
                 fullWidth
                 inputProps={{ min: 0 }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">лв</InputAdornment>,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
