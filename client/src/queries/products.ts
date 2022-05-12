@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   CreateProductDto,
+  UpdateProductDto,
   ProductDto,
   ProductListItemDto,
 } from '../../../dto/products.dto';
@@ -49,6 +50,20 @@ export function useProductQuery(productId: string | undefined) {
 export function useCreateProductMutation() {
   return useMutation((product: CreateProductDto) =>
     axios.post('products/create', product).then((response) => response.data),
+  );
+}
+
+export function useUpdateProductMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation((params: {productId: string, product: UpdateProductDto}) =>
+    axios
+      .put(`products/update/${encodeURIComponent(params.productId)}`, params.product)
+      .then((response) => {
+        queryClient.invalidateQueries('products');
+
+        return response.data;
+      }),
   );
 }
 

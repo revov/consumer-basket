@@ -10,7 +10,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { matchPath, Link, useLocation } from 'react-router-dom';
 import { Divider, ListItemButton } from '@mui/material';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 export function SideMenu() {
   const location = useLocation();

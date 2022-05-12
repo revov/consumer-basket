@@ -4,6 +4,8 @@ import {
   Alert,
   Button,
   Card,
+  Checkbox,
+  FormControlLabel,
   Grid,
   InputAdornment,
   Paper,
@@ -13,19 +15,34 @@ import EditIcon from '@mui/icons-material/Edit';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import bg from 'date-fns/locale/bg';
+import { formatISO } from 'date-fns';
 
-import { useProductQuery } from '../queries/products';
-import { ProductHistoryTable } from '../components/product-history-table';
+import { useProductQuery, useUpdateProductMutation } from '../queries/products';
+import { PurchaseHistoryTable } from '../components/purchase-history-table';
+import startOfToday from 'date-fns/startOfToday';
+import {
+  ProductPurchaseForm,
+  PurchaseFormState,
+} from '../components/product-purchase-form';
 
 export function EditProductRoute() {
   const { productId } = useParams();
   const existingProductQuery = useProductQuery(productId);
+  const updateProductMutation = useUpdateProductMutation();
 
   const navigate = useNavigate();
 
   const [serverError, setServerError] = useState('');
 
   const [productName, setProductName] = useState('');
+  const [productPurchase, setProductPurchase] = useState<PurchaseFormState>({
+    price: null,
+    promoPrice: null,
+    quantityInThePackage: 1,
+    store: '',
+    date: startOfToday(),
+  });
+  const [registerNewPurchase, setRegisterNewPurchase] = useState(false);
 
   useEffect(() => {
     setProductName((prev) => existingProductQuery.data?.name ?? prev);
@@ -33,14 +50,21 @@ export function EditProductRoute() {
 
   const handleUpdate = async () => {
     try {
-      // await createProductMutation.mutateAsync({
-      //   name: productFormState.name,
-      //   price: +productFormState.price,
-      //   promoPrice: productFormState.promoPrice || undefined,
-      //   store: productFormState.store,
-      //   quantityInThePackage: productFormState.quantityInThePackage,
-      //   date: formatISO(productFormState.date ?? startOfToday(), { representation: 'date' }),
-      // });
+      const history = [...(existingProductQuery.data?.history ?? [])];
+      if (registerNewPurchase) {
+        history.push({
+          ...productPurchase,
+          price: productPurchase.price ?? 0,
+          date: formatISO(productPurchase.date ?? startOfToday(), { representation: 'date' })
+        })
+      }
+      await updateProductMutation.mutateAsync({
+        productId: productId!,
+        product: {
+          name: productName,
+          history: history,
+        }
+      });
 
       navigate('/products');
     } catch (e) {
@@ -82,52 +106,31 @@ export function EditProductRoute() {
               </Grid>
 
               <Grid item xs={12}>
-                <ProductHistoryTable
+                <PurchaseHistoryTable
                   history={existingProductQuery.data.history ?? []}
                 />
               </Grid>
 
               <Grid item xs={12}>
-                <Card>
-                  <Grid container spacing={3} sx={{ padding: 3 }}>
-                    <Grid item xs={12}>
-                      Регистриране на нова цена:
-                    </Grid>
-                    <Grid item xs={3}>
-                      <TextField
-                        label="Цена (без намаление)"
-                        value={0}
-                        type="number"
-                        fullWidth
-                        inputProps={{ min: 0 }}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">лв</InputAdornment>
-                          ),
-                        }}
-                        autoComplete="off"
-                        size="small"
-                      />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <TextField
-                        label="Промо цена"
-                        value={0}
-                        type="number"
-                        fullWidth
-                        inputProps={{ min: 0 }}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">лв</InputAdornment>
-                          ),
-                        }}
-                        autoComplete="off"
-                        size="small"
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
+                <FormControlLabel
+                  label={'Регистриране на нова покупка'}
+                  control={
+                    <Checkbox
+                      checked={registerNewPurchase}
+                      onChange={() => setRegisterNewPurchase((prev) => !prev)}
+                    />
+                  }
+                />
               </Grid>
+
+              {registerNewPurchase && (
+                <Grid item xs={12}>
+                  <ProductPurchaseForm
+                    value={productPurchase}
+                    onChange={setProductPurchase}
+                  />
+                </Grid>
+              )}
 
               <Grid item xs={12} sm={6}>
                 <Button

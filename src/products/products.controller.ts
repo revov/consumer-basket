@@ -5,9 +5,15 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
-import { CreateProductDto, ProductHistoryItem } from 'dto/products.dto';
+import { orderBy } from 'lodash';
+import {
+  CreateProductDto,
+  ProductHistoryItem,
+  UpdateProductDto,
+} from 'dto/products.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PrismaService } from 'src/prisma.service';
 
@@ -75,6 +81,33 @@ export class ProductsController {
             date: dto.date,
           },
         ] as ProductHistoryItem[]),
+      },
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('update/:id')
+  async updatProduct(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    const sortedPurchases = orderBy(
+      dto.history,
+      'date' as keyof typeof dto.history[0],
+      'desc',
+    );
+    const lastPurchase = sortedPurchases[0];
+
+    return this.prisma.product.update({
+      data: {
+        name: dto.name,
+        history: JSON.stringify(dto.history),
+
+        price: lastPurchase.price,
+        promoPrice: lastPurchase.promoPrice,
+        store: lastPurchase.store,
+        quantityInThePackage: lastPurchase.quantityInThePackage,
+        date: new Date(lastPurchase.date),
+      },
+      where: {
+        id,
       },
     });
   }

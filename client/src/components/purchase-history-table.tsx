@@ -5,6 +5,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { orderBy } from 'lodash';
+import { useMemo } from 'react';
 import { ProductHistoryItem } from '../../../dto/products.dto';
 import { CurrencyRenderer } from './currency-renderer';
 import { DateRenderer } from './date-renderer';
@@ -13,7 +15,13 @@ interface Props {
   history: ProductHistoryItem[];
 }
 
-export function ProductHistoryTable(props: Props) {
+export function PurchaseHistoryTable(props: Props) {
+  const sortedPurchases = useMemo(
+    () =>
+      orderBy(props.history, 'date' as keyof typeof props.history[0], 'desc'),
+    [],
+  );
+
   return (
     <Table sx={{ minWidth: 650, maxHeight: 400 }} stickyHeader>
       <TableHead>
@@ -27,7 +35,7 @@ export function ProductHistoryTable(props: Props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {props.history?.map((historyItem, index) => (
+        {sortedPurchases?.map((purchase, index) => (
           <TableRow
             key={index}
             sx={{
@@ -37,16 +45,16 @@ export function ProductHistoryTable(props: Props) {
             hover
           >
             <TableCell>
-              <DateRenderer dateAsIso8601={historyItem.date} />
+              <DateRenderer dateAsIso8601={purchase.date} />
             </TableCell>
             <TableCell align="right">
-              <CurrencyRenderer value={historyItem.promoPrice} />
+              <CurrencyRenderer value={purchase.promoPrice} />
             </TableCell>
             <TableCell align="right">
-              <CurrencyRenderer value={historyItem.price} />
+              <CurrencyRenderer value={purchase.price} />
             </TableCell>
-            <TableCell>{historyItem.quantityInThePackage}</TableCell>
-            <TableCell>{historyItem.store}</TableCell>
+            <TableCell>{purchase.quantityInThePackage}</TableCell>
+            <TableCell>{purchase.store}</TableCell>
             <TableCell></TableCell>
 
             <TableCell>

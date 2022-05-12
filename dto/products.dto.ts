@@ -8,6 +8,11 @@ export interface CreateProductDto {
   date: string;
 }
 
+export interface UpdateProductDto {
+  name: string;
+  history: ProductHistoryItem[];
+}
+
 export interface ProductListItemDto {
   id: string;
   name: string;
@@ -26,9 +31,8 @@ export interface ProductDto extends ProductListItemDto {
 }
 
 export interface ProductHistoryItem {
-  name: string;
   price: number;
-  promoPrice: number;
+  promoPrice: number | null;
   store: string;
   quantityInThePackage: number;
   date: string;
