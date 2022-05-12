@@ -1,6 +1,13 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Grid, InputAdornment, Paper, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import {
+  Alert,
+  Button,
+  Grid,
+  InputAdornment,
+  Paper,
+  TextField,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -9,34 +16,46 @@ import formatISO from 'date-fns/formatISO';
 import bg from 'date-fns/locale/bg';
 
 import { useCreateProductMutation } from '../queries/products';
+import { ProductHistoryItem } from '../../../dto/products.dto';
 
-interface Props {
-  isExisting: boolean;
+interface ProductFormState {
+  name: string;
+  price: number | null,
+  promoPrice: number | null,
+  quantityInThePackage: number,
+  store: string,
+  date: Date,
+  history: ProductHistoryItem[],
 }
 
-export function SingleProductRoute(props: Props) {
-  const { productId } = useParams();
+export function CreateProductRoute() {
   const createProductMutation = useCreateProductMutation();
+
   const navigate = useNavigate();
 
   const [serverError, setServerError] = useState('');
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState<number | ''>('');
-  const [promoPrice, setPromoPrice] = useState<number | ''>('');
-  const [quantityInThePackage, setQuantityInThePackage] = useState(1);
-  const [store, setStore] = useState('');
-  const [date, setDate] = useState<Date | null>(startOfToday());
+  const [productFormState, setProductFormState] = useState<ProductFormState>({
+    name: '',
+    price: null,
+    promoPrice: null,
+    quantityInThePackage: 1,
+    store: '',
+    date: startOfToday(),
+    history: [],
+  });
 
   const handleCreate = async () => {
     try {
       await createProductMutation.mutateAsync({
-        name: name,
-        price: +price,
-        promoPrice: +promoPrice,
-        store: store,
-        quantityInThePackage: quantityInThePackage,
-        date: formatISO(date ?? startOfToday(), { representation: 'date' }),
+        name: productFormState.name,
+        price: productFormState.price ?? 0,
+        promoPrice: productFormState.promoPrice || undefined,
+        store: productFormState.store,
+        quantityInThePackage: productFormState.quantityInThePackage,
+        date: formatISO(productFormState.date ?? startOfToday(), {
+          representation: 'date',
+        }),
       });
 
       navigate('/products');
@@ -51,18 +70,12 @@ export function SingleProductRoute(props: Props) {
       square
       sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
     >
-      <h3>
-        {props.isExisting ? 'Редактиране ' : 'Добавяне '}на продукт {productId}
-      </h3>
+      <h3>Добавяне на продукт</h3>
 
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-
-          if (props.isExisting) {
-          } else {
-            handleCreate();
-          }
+          handleCreate();
         }}
         noValidate
       >
@@ -77,66 +90,97 @@ export function SingleProductRoute(props: Props) {
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Име на продукта"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={productFormState.name ?? ''}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    name: e.target.value,
+                  })
+                }
                 fullWidth
-                autoComplete='false'
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Цена (без намаление)"
-                value={price}
-                onChange={(e) => setPrice(+e.target.value)}
+                value={productFormState.price ?? ''}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    price: +e.target.value,
+                  })
+                }
                 type="number"
                 fullWidth
                 inputProps={{ min: 0 }}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">лв</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="end">лв</InputAdornment>
+                  ),
                 }}
-                autoComplete='false'
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Промо цена"
-                value={promoPrice}
-                onChange={(e) => setPromoPrice(+e.target.value)}
+                value={productFormState.promoPrice ?? ''}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    promoPrice: +e.target.value,
+                  })
+                }
                 type="number"
                 fullWidth
                 inputProps={{ min: 0 }}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">лв</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="end">лв</InputAdornment>
+                  ),
                 }}
-                autoComplete='false'
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Количество в опаковка"
-                value={quantityInThePackage}
-                onChange={(e) => setQuantityInThePackage(+e.target.value)}
+                value={productFormState.quantityInThePackage}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    quantityInThePackage: +e.target.value,
+                  })
+                }
                 type="number"
                 fullWidth
                 inputProps={{ min: 0, step: 1 }}
-                autoComplete='false'
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Магазин"
-                value={store}
-                onChange={(e) => setStore(e.target.value)}
+                value={productFormState.store}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    store: e.target.value,
+                  })
+                }
                 fullWidth
-                autoComplete='false'
+                autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <DatePicker
                 label="Дата на закупуване"
                 inputFormat="dd/MM/yyyy"
-                value={date}
-                onChange={setDate}
+                value={productFormState.date}
+                onChange={(value) =>
+                  setProductFormState({ ...productFormState, date: value! })
+                }
                 renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
@@ -145,10 +189,10 @@ export function SingleProductRoute(props: Props) {
               <Button
                 type="submit"
                 variant="contained"
-                color="secondary"
+                color="primary"
                 startIcon={<AddIcon />}
               >
-                {props.isExisting ? 'Редактирай ' : 'Добави'}
+                Добави
               </Button>
             </Grid>
           </Grid>

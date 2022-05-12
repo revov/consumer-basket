@@ -13,10 +13,14 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { DateRenderer } from '../components/date-renderer';
-import { useDeleteProductMutation, useProductsQuery } from '../queries/products';
+import {
+  useDeleteProductMutation,
+  useProductsQuery,
+} from '../queries/products';
 import { ConfirmationDialog } from '../components/confirmation-dialog';
 import { useState } from 'react';
-import { ProductDto } from '../../../dto/products.dto';
+import { ProductListItemDto } from '../../../dto/products.dto';
+import { CurrencyRenderer } from '../components/currency-renderer';
 
 export function ProductsRoute() {
   const { data: products } = useProductsQuery();
@@ -24,7 +28,7 @@ export function ProductsRoute() {
   const navigate = useNavigate();
 
   const [productForDeletion, setProductForDeletion] = useState<
-    undefined | ProductDto
+    undefined | ProductListItemDto
   >(undefined);
 
   const formatter = new Intl.NumberFormat('bg-BG', {
@@ -36,7 +40,6 @@ export function ProductsRoute() {
     <div>
       <Button
         variant="contained"
-        color="secondary"
         startIcon={<AddIcon />}
         sx={{ marginBottom: '10px' }}
         onClick={() => navigate('create')}
@@ -69,20 +72,28 @@ export function ProductsRoute() {
                 onClick={() => navigate(`edit/${product.id}`)}
               >
                 <TableCell>{product.name}</TableCell>
-                <TableCell align="right">{formatter.format(product.price as any)}</TableCell>
-                <TableCell align="right">{formatter.format(product.promoPrice as any)}</TableCell>
+                <TableCell align="right">
+                  <CurrencyRenderer value={product.price} />
+                </TableCell>
+                <TableCell align="right">
+                  <CurrencyRenderer value={product.promoPrice} />
+                </TableCell>
                 <TableCell>{product.quantityInThePackage}</TableCell>
                 <TableCell>{product.store}</TableCell>
-                <TableCell>{product.category?.name}</TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                   <DateRenderer dateAsIso8601={product.date} />
                 </TableCell>
 
                 <TableCell>
-                  <IconButton aria-label="delete" size="small" onClick={e => {
-                    e.stopPropagation();
-                    setProductForDeletion(product);
-                  }}>
+                  <IconButton
+                    aria-label="delete"
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setProductForDeletion(product);
+                    }}
+                  >
                     <DeleteIcon fontSize="inherit" />
                   </IconButton>
                 </TableCell>

@@ -7,10 +7,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CreateProductDto } from 'dto/products.dto';
+import { CreateProductDto, ProductHistoryItem } from 'dto/products.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PrismaService } from 'src/prisma.service';
-import { ProductHistoryItem } from './product-history-item';
 
 @Controller('products')
 export class ProductsController {
@@ -20,10 +19,39 @@ export class ProductsController {
   @Get()
   async getProducts() {
     return this.prisma.product.findMany({
-      include: {
-        category: true,
+      select: {
+        id: true,
+        date: true,
+        name: true,
+        price: true,
+        promoPrice: true,
+        quantityInThePackage: true,
+        store: true,
+      },
+      orderBy: [
+        {
+          date: 'desc',
+        },
+        {
+          updatedAt: 'desc',
+        },
+      ],
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getProduct(@Param('id') id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: id,
       },
     });
+
+    return {
+      ...product,
+      history: JSON.parse(product.history.toString() || '[]'),
+    };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -38,7 +66,15 @@ export class ProductsController {
         quantityInThePackage: dto.quantityInThePackage,
         date: new Date(dto.date),
         categoryId: dto.categoryId,
-        history: JSON.stringify([] as ProductHistoryItem[]),
+        history: JSON.stringify([
+          {
+            price: dto.price,
+            promoPrice: dto.promoPrice,
+            store: dto.store,
+            quantityInThePackage: dto.quantityInThePackage,
+            date: dto.date,
+          },
+        ] as ProductHistoryItem[]),
       },
     });
   }

@@ -10,8 +10,9 @@ import { Layout } from './components/layout';
 import { CategoriesRoute } from './routes/categories-route';
 import { LoginRoute } from './routes/login-route';
 import { LogoutRoute } from './routes/logout-route';
-import { SingleProductRoute } from './routes/single-product-route';
 import { ProductsRoute } from './routes/products-route';
+import { CreateProductRoute } from './routes/create-product-route';
+import { EditProductRoute } from './routes/edit-product-route';
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -50,7 +51,7 @@ function App() {
                   path="products/create"
                   element={
                     <RequireAuth>
-                      <SingleProductRoute isExisting={false} />
+                      <CreateProductRoute />
                     </RequireAuth>
                   }
                 />
@@ -59,7 +60,7 @@ function App() {
                   path="products/edit/:productId"
                   element={
                     <RequireAuth>
-                      <SingleProductRoute isExisting />
+                      <EditProductRoute/>
                     </RequireAuth>
                   }
                 />

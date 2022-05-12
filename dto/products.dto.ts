@@ -1,6 +1,3 @@
-import { Category } from '@prisma/client';
-import { ProductHistoryItem } from 'src/products/product-history-item';
-
 export interface CreateProductDto {
   name: string;
   price: number;
@@ -11,15 +8,28 @@ export interface CreateProductDto {
   date: string;
 }
 
-export type ProductDto = {
+export interface ProductListItemDto {
   id: string;
   name: string;
   price: string;
   promoPrice: string | null;
   store: string;
-  quantityInThePackage: string;
-  categoryId: string | null;
+  quantityInThePackage: number;
   date: string;
+}
+
+export interface ProductDto extends ProductListItemDto {
   history: ProductHistoryItem[];
-  category: Category;
-};
+  createdAt: string;
+  updatedAt: string;
+  //category?
+}
+
+export interface ProductHistoryItem {
+  name: string;
+  price: number;
+  promoPrice: number;
+  store: string;
+  quantityInThePackage: number;
+  date: string;
+}
