@@ -107,7 +107,7 @@ export function CreateProductRoute() {
               color="primary"
               startIcon={<AddIcon />}
             >
-              Добави
+              Създай
             </Button>
           </Grid>
         </Grid>

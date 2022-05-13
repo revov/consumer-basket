@@ -25,13 +25,13 @@ export function ProductPurchaseForm(props: Props) {
     (
       label: string,
       value: number | null,
-      onChange: (value: number) => void,
+      onChange: (value: number | null) => void,
     ) => {
       return (
         <TextField
           label={label}
           value={value ?? ''}
-          onChange={(e) => onChange(+e.target.value)}
+          onChange={(e) => onChange(e.target.value === '' ? null : +e.target.value)}
           type="number"
           fullWidth
           inputProps={{ min: 0 }}
@@ -66,12 +66,12 @@ export function ProductPurchaseForm(props: Props) {
           {renderCurrencyControl(
             'Цена (без намаление)',
             props.value.price,
-            (v) => props.onChange({ ...props.value, price: +v }),
+            (v) => props.onChange({ ...props.value, price: v }),
           )}
         </Grid>
         <Grid item xs={12} sm={4}>
           {renderCurrencyControl('Промо цена', props.value.promoPrice, (v) =>
-            props.onChange({ ...props.value, promoPrice: +v }),
+            props.onChange({ ...props.value, promoPrice: v }),
           )}
         </Grid>
         <Grid item xs={12} sm={6}>

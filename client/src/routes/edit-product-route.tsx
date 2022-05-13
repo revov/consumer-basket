@@ -157,7 +157,7 @@ export function EditProductRoute() {
                 color="secondary"
                 startIcon={<EditIcon />}
               >
-                Редактирай
+                Запази промените
               </Button>
             </Grid>
           </Grid>
