@@ -16,7 +16,7 @@ import formatISO from 'date-fns/formatISO';
 import bg from 'date-fns/locale/bg';
 
 import { useCreateProductMutation } from '../queries/products';
-import { ProductHistoryItem } from '../../../dto/products.dto';
+import { ProductHistoryItem } from '../../../server/common/products.dto';
 
 interface ProductFormState {
   name: string;

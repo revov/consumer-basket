@@ -3,7 +3,6 @@ import { Grid, InputAdornment, TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import bg from 'date-fns/locale/bg';
-import { ProductHistoryItem } from '../../../dto/products.dto';
 
 interface Props {
   value: PurchaseFormState;

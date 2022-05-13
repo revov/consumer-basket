@@ -1,1 +1,1 @@
-web: npm run start:prod
+web: npm run --workspace=server start:prod

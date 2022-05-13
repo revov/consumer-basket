@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { orderBy } from 'lodash';
 import { useMemo } from 'react';
-import { ProductHistoryItem } from '../../../dto/products.dto';
+import { ProductHistoryItem } from '../../../server/common/products.dto';
 import { CurrencyRenderer } from './currency-renderer';
 import { DateRenderer } from './date-renderer';
 
@@ -18,8 +18,8 @@ interface Props {
 export function PurchaseHistoryTable(props: Props) {
   const sortedPurchases = useMemo(
     () =>
-      orderBy(props.history, 'date' as keyof typeof props.history[0], 'desc'),
-    [],
+      orderBy(props.history, 'date' as keyof ProductHistoryItem, 'desc'),
+    [props.history],
   );
 
   return (

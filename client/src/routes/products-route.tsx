@@ -19,7 +19,7 @@ import {
 } from '../queries/products';
 import { ConfirmationDialog } from '../components/confirmation-dialog';
 import { useState } from 'react';
-import { ProductListItemDto } from '../../../dto/products.dto';
+import { ProductListItemDto } from '../../../server/common/products.dto';
 import { CurrencyRenderer } from '../components/currency-renderer';
 
 export function ProductsRoute() {
@@ -30,11 +30,6 @@ export function ProductsRoute() {
   const [productForDeletion, setProductForDeletion] = useState<
     undefined | ProductListItemDto
   >(undefined);
-
-  const formatter = new Intl.NumberFormat('bg-BG', {
-    style: 'currency',
-    currency: 'BGN',
-  });
 
   return (
     <div>

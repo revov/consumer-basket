@@ -13,7 +13,7 @@ import {
   CreateProductDto,
   ProductHistoryItem,
   UpdateProductDto,
-} from 'dto/products.dto';
+} from 'common/products.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { PrismaService } from 'src/prisma.service';
 

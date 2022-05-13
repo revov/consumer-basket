@@ -5,7 +5,7 @@ import {
   UpdateProductDto,
   ProductDto,
   ProductListItemDto,
-} from '../../../dto/products.dto';
+} from '../../../server/common/products.dto';
 
 export function useProductsQuery() {
   return useQuery('products', () =>
