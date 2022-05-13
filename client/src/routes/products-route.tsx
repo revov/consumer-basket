@@ -39,8 +39,8 @@ export function ProductsRoute() {
       >
         Нов продукт
       </Button>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650, maxHeight: 800 }} stickyHeader>
+      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: 800 }} >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>Продукт</TableCell>

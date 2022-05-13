@@ -31,7 +31,8 @@ export function PurchaseHistoryTable(props: Props) {
           <TableCell>Дата</TableCell>
           <TableCell align="right">Цена</TableCell>
           <TableCell align="right">Промо цена</TableCell>
-          <TableCell>Кол. в опакова</TableCell>
+          <TableCell>Кол. в опаковка</TableCell>
+          <TableCell align="right">Ед. цена</TableCell>
           <TableCell>Магазин</TableCell>
           <TableCell></TableCell>
         </TableRow>
@@ -64,6 +65,9 @@ export function PurchaseHistoryTable(props: Props) {
                 <CurrencyRenderer value={purchase.promoPrice} />
               </TableCell>
               <TableCell>{purchase.quantityInThePackage}</TableCell>
+              <TableCell align="right">
+                <CurrencyRenderer value={(purchase.promoPrice ?? purchase.price) / purchase.quantityInThePackage} />
+              </TableCell>
               <TableCell>{purchase.store}</TableCell>
               <TableCell></TableCell>
 
