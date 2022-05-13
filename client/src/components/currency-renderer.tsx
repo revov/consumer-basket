@@ -12,7 +12,7 @@ const formatter = new Intl.NumberFormat('bg-BG', {
 export const CurrencyRenderer = React.memo((props: Props) => {
   // eslint-disable-next-line eqeqeq
   if (props.value == undefined) {
-    return <>''</>;
+    return <>-</>;
   }
   return <>{formatter.format(+props.value)}</>;
 });

@@ -1,30 +1,24 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import InputAdornment from '@mui/material/InputAdornment';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import AddIcon from '@mui/icons-material/Add';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import startOfToday from 'date-fns/startOfToday';
-import formatISO from 'date-fns/formatISO';
-import bg from 'date-fns/locale/bg';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import AddIcon from "@mui/icons-material/Add";
+import startOfToday from "date-fns/startOfToday";
+import formatISO from "date-fns/formatISO";
 
-import { useCreateProductMutation } from '../queries/products';
-import { ProductHistoryItem } from '../../../server/common/products.dto';
+import { useCreateProductMutation } from "../queries/products";
+import { ProductPurchaseForm } from "src/components/product-purchase-form";
+import Paper from "@mui/material/Paper";
 
 interface ProductFormState {
   name: string;
-  price: number | null,
-  promoPrice: number | null,
-  quantityInThePackage: number,
-  store: string,
-  date: Date,
-  history: ProductHistoryItem[],
+  price: number | null;
+  promoPrice: number | null;
+  quantityInThePackage: number;
+  store: string;
+  date: Date;
 }
 
 export function CreateProductRoute() {
@@ -32,16 +26,15 @@ export function CreateProductRoute() {
 
   const navigate = useNavigate();
 
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const [productFormState, setProductFormState] = useState<ProductFormState>({
-    name: '',
+    name: "",
     price: null,
     promoPrice: null,
     quantityInThePackage: 1,
-    store: '',
+    store: "",
     date: startOfToday(),
-    history: [],
   });
 
   const handleCreate = async () => {
@@ -53,13 +46,13 @@ export function CreateProductRoute() {
         store: productFormState.store,
         quantityInThePackage: productFormState.quantityInThePackage,
         date: formatISO(productFormState.date ?? startOfToday(), {
-          representation: 'date',
+          representation: "date",
         }),
       });
 
-      navigate('/products');
+      navigate("/products");
     } catch (e) {
-      setServerError('Имате невалидно попълнени данни');
+      setServerError("Имате невалидно попълнени данни");
     }
   };
 
@@ -78,124 +71,46 @@ export function CreateProductRoute() {
         }}
         noValidate
       >
-        <LocalizationProvider dateAdapter={AdapterDateFns} locale={bg}>
-          <Grid container spacing={3}>
-            {!!serverError && (
-              <Grid item xs={12}>
-                <Alert severity="error">{serverError}</Alert>
-              </Grid>
-            )}
+        <Grid container spacing={3}>
+          {!!serverError && (
+            <Grid item xs={12}>
+              <Alert severity="error">{serverError}</Alert>
+            </Grid>
+          )}
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Име на продукта"
-                value={productFormState.name ?? ''}
-                onChange={(e) =>
-                  setProductFormState({
-                    ...productFormState,
-                    name: e.target.value,
-                  })
-                }
-                fullWidth
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Цена (без намаление)"
-                value={productFormState.price ?? ''}
-                onChange={(e) =>
-                  setProductFormState({
-                    ...productFormState,
-                    price: +e.target.value,
-                  })
-                }
-                type="number"
-                fullWidth
-                inputProps={{ min: 0 }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">лв</InputAdornment>
-                  ),
-                }}
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Промо цена"
-                value={productFormState.promoPrice ?? ''}
-                onChange={(e) =>
-                  setProductFormState({
-                    ...productFormState,
-                    promoPrice: +e.target.value,
-                  })
-                }
-                type="number"
-                fullWidth
-                inputProps={{ min: 0 }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">лв</InputAdornment>
-                  ),
-                }}
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Количество в опаковка"
-                value={productFormState.quantityInThePackage}
-                onChange={(e) =>
-                  setProductFormState({
-                    ...productFormState,
-                    quantityInThePackage: +e.target.value,
-                  })
-                }
-                type="number"
-                fullWidth
-                inputProps={{ min: 0, step: 1 }}
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Магазин"
-                value={productFormState.store}
-                onChange={(e) =>
-                  setProductFormState({
-                    ...productFormState,
-                    store: e.target.value,
-                  })
-                }
-                fullWidth
-                autoComplete="off"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <DatePicker
-                label="Дата на закупуване"
-                inputFormat="dd/MM/yyyy"
-                value={productFormState.date}
-                onChange={(value) =>
-                  setProductFormState({ ...productFormState, date: value! })
-                }
-                renderInput={(params) => <TextField {...params} fullWidth />}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-              >
-                Добави
-              </Button>
-            </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Име на продукта"
+              value={productFormState.name ?? ""}
+              onChange={(e) =>
+                setProductFormState({
+                  ...productFormState,
+                  name: e.target.value,
+                })
+              }
+              fullWidth
+              autoComplete="off"
+            />
           </Grid>
-        </LocalizationProvider>
+
+          <Grid item xs={12}>
+            <ProductPurchaseForm
+              value={productFormState}
+              onChange={value => setProductFormState(prev => ({...prev, ...value}))}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+            >
+              Добави
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </Paper>
   );
