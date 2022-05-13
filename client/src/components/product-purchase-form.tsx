@@ -1,6 +1,9 @@
-import { useCallback } from 'react';
-import { Grid, InputAdornment, TextField } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { useCallback, useMemo } from 'react';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import bg from 'date-fns/locale/bg';
 
@@ -47,7 +50,7 @@ export function ProductPurchaseForm(props: Props) {
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={bg}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
-          <DatePicker
+          <DatePicker          
             label="Дата на закупуване"
             inputFormat="dd/MM/yyyy"
             value={props.value.date}

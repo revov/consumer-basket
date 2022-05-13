@@ -1,4 +1,5 @@
-import { Box, Toolbar } from '@mui/material';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
 
 import { TopBar } from './top-bar';
 import { SideMenu } from './side-menu';

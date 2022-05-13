@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Alert,
-  Button,
-  Card,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  InputAdornment,
-  Paper,
-  TextField,
-} from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
 import EditIcon from '@mui/icons-material/Edit';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import bg from 'date-fns/locale/bg';
-import { formatISO } from 'date-fns';
+import formatISO from 'date-fns/formatISO';
 
 import { useProductQuery, useUpdateProductMutation } from '../queries/products';
 import { PurchaseHistoryTable } from '../components/purchase-history-table';
