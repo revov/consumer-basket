@@ -11,12 +11,15 @@ import formatISO from "date-fns/formatISO";
 import { useCreateProductMutation } from "../queries/products";
 import { ProductPurchaseForm } from "src/components/product-purchase-form";
 import Paper from "@mui/material/Paper";
+import { Unit } from "../../../server/common/products.dto";
+import { UnitSelector } from "src/components/inputs/unit-selector";
 
 interface ProductFormState {
   name: string;
   price: number | null;
   promoPrice: number | null;
   quantityInThePackage: number;
+  unit: Unit;
   store: string;
   date: Date;
 }
@@ -33,6 +36,7 @@ export function CreateProductRoute() {
     price: null,
     promoPrice: null,
     quantityInThePackage: 1,
+    unit: "ITEM",
     store: "",
     date: startOfToday(),
   });
@@ -45,6 +49,7 @@ export function CreateProductRoute() {
         promoPrice: productFormState.promoPrice || undefined,
         store: productFormState.store,
         quantityInThePackage: productFormState.quantityInThePackage,
+        unit: productFormState.unit,
         date: formatISO(productFormState.date ?? startOfToday(), {
           representation: "date",
         }),
@@ -78,7 +83,7 @@ export function CreateProductRoute() {
             </Grid>
           )}
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={8}>
             <TextField
               label="Име на продукта"
               value={productFormState.name ?? ""}
@@ -92,11 +97,24 @@ export function CreateProductRoute() {
               autoComplete="off"
             />
           </Grid>
+          <Grid item xs={12} sm={4}>
+            <UnitSelector
+              value={productFormState.unit}
+              onChange={(unit) =>
+                setProductFormState({
+                  ...productFormState,
+                  unit,
+                })
+              }
+            />
+          </Grid>
 
           <Grid item xs={12}>
             <ProductPurchaseForm
               value={productFormState}
-              onChange={value => setProductFormState(prev => ({...prev, ...value}))}
+              onChange={(value) =>
+                setProductFormState((prev) => ({ ...prev, ...value }))
+              }
             />
           </Grid>
 

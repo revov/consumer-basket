@@ -1,24 +1,25 @@
-import { useState } from 'react';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
-import { DateRenderer } from '../components/date-renderer';
+import { useState } from "react";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
+import { DateRenderer } from "../components/date-renderer";
 import {
   useDeleteProductMutation,
   useProductsQuery,
-} from '../queries/products';
-import { ConfirmationDialog } from '../components/confirmation-dialog';
-import { ProductListItemDto } from '../../../server/common/products.dto';
-import { CurrencyRenderer } from '../components/currency-renderer';
+} from "../queries/products";
+import { ConfirmationDialog } from "../components/confirmation-dialog";
+import { ProductListItemDto } from "../../../server/common/products.dto";
+import { CurrencyRenderer } from "../components/currency-renderer";
+import { QuantityRenderer } from "src/components/quantity-renderer";
 
 export function ProductsRoute() {
   const { data: products } = useProductsQuery();
@@ -34,12 +35,12 @@ export function ProductsRoute() {
       <Button
         variant="contained"
         startIcon={<AddIcon />}
-        sx={{ marginBottom: '10px' }}
-        onClick={() => navigate('create')}
+        sx={{ marginBottom: "10px" }}
+        onClick={() => navigate("create")}
       >
         Нов продукт
       </Button>
-      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: 800 }} >
+      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: 800 }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -58,8 +59,8 @@ export function ProductsRoute() {
               <TableRow
                 key={product.id}
                 sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  '&:hover': { cursor: 'pointer' },
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  "&:hover": { cursor: "pointer" },
                 }}
                 hover
                 onClick={() => navigate(`edit/${product.id}`)}
@@ -71,7 +72,12 @@ export function ProductsRoute() {
                 <TableCell align="right">
                   <CurrencyRenderer value={product.promoPrice} />
                 </TableCell>
-                <TableCell>{product.quantityInThePackage}</TableCell>
+                <TableCell>
+                  <QuantityRenderer
+                    quantity={product.quantityInThePackage}
+                    unit={product.unit}
+                  />
+                </TableCell>
                 <TableCell>{product.store}</TableCell>
                 <TableCell></TableCell>
                 <TableCell>

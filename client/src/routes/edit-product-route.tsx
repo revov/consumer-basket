@@ -17,7 +17,8 @@ import {
   ProductPurchaseForm,
   PurchaseFormState,
 } from "../components/product-purchase-form";
-import { ProductHistoryItem } from "../../../server/common/products.dto";
+import { ProductHistoryItem, Unit } from "../../../server/common/products.dto";
+import { UnitSelector } from "src/components/inputs/unit-selector";
 
 export function EditProductRoute() {
   const { productId } = useParams();
@@ -29,6 +30,7 @@ export function EditProductRoute() {
   const [serverError, setServerError] = useState("");
 
   const [productName, setProductName] = useState("");
+  const [productUnit, setProductUnit] = useState<Unit>("ITEM");
   const [productPurchase, setProductPurchase] = useState<PurchaseFormState>({
     price: null,
     promoPrice: null,
@@ -44,13 +46,14 @@ export function EditProductRoute() {
 
   useEffect(() => {
     setProductName((prev) => existingProductQuery.data?.name ?? prev);
+    setProductUnit((prev) => existingProductQuery.data?.unit ?? prev);
   }, [existingProductQuery.data]);
 
   const handleUpdate = async () => {
     try {
       const history = [
-        ...(existingProductQuery.data?.history.filter((existingPurchase) =>
-          !purchasesForDeletion.includes(existingPurchase)
+        ...(existingProductQuery.data?.history.filter(
+          (existingPurchase) => !purchasesForDeletion.includes(existingPurchase)
         ) ?? []),
       ];
 
@@ -67,6 +70,7 @@ export function EditProductRoute() {
         productId: productId!,
         product: {
           name: productName,
+          unit: productUnit,
           history: history,
         },
       });
@@ -99,7 +103,7 @@ export function EditProductRoute() {
                 <Alert severity="error">{serverError}</Alert>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={8}>
               <TextField
                 label="Име на продукта"
                 value={productName}
@@ -108,10 +112,17 @@ export function EditProductRoute() {
                 autoComplete="off"
               />
             </Grid>
+            <Grid item xs={12} sm={4}>
+              <UnitSelector
+                value={productUnit}
+                onChange={(unit) => setProductUnit(unit)}
+              />
+            </Grid>
 
             <Grid item xs={12}>
               <PurchaseHistoryTable
                 history={existingProductQuery.data.history ?? []}
+                unit={productUnit}
                 purchasesForDeletion={purchasesForDeletion}
                 onDelete={(purchaseForDeletion) =>
                   setPurchasesForDeletion((prev) => {

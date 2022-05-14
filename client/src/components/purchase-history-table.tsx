@@ -8,12 +8,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
 import orderBy from "lodash/orderBy";
 import { useMemo } from "react";
-import { ProductHistoryItem } from "../../../server/common/products.dto";
+import { ProductHistoryItem, Unit } from "../../../server/common/products.dto";
 import { CurrencyRenderer } from "./currency-renderer";
 import { DateRenderer } from "./date-renderer";
+import { QuantityRenderer } from "./quantity-renderer";
 
 interface Props {
   history: ProductHistoryItem[];
+  unit: Unit;
   purchasesForDeletion: ProductHistoryItem[];
   onDelete: (purchase: ProductHistoryItem) => void;
 }
@@ -39,7 +41,8 @@ export function PurchaseHistoryTable(props: Props) {
       </TableHead>
       <TableBody>
         {sortedPurchases?.map((purchase, index) => {
-          const isMarkedForDeletion = props.purchasesForDeletion.includes(purchase);
+          const isMarkedForDeletion =
+            props.purchasesForDeletion.includes(purchase);
 
           return (
             <TableRow
@@ -64,9 +67,19 @@ export function PurchaseHistoryTable(props: Props) {
               <TableCell align="right">
                 <CurrencyRenderer value={purchase.promoPrice} />
               </TableCell>
-              <TableCell>{purchase.quantityInThePackage}</TableCell>
+              <TableCell>
+                <QuantityRenderer
+                  quantity={purchase.quantityInThePackage}
+                  unit={props.unit}
+                />
+              </TableCell>
               <TableCell align="right">
-                <CurrencyRenderer value={(purchase.promoPrice ?? purchase.price) / purchase.quantityInThePackage} />
+                <CurrencyRenderer
+                  value={
+                    (purchase.promoPrice ?? purchase.price) /
+                    purchase.quantityInThePackage
+                  }
+                />
               </TableCell>
               <TableCell>{purchase.store}</TableCell>
               <TableCell></TableCell>
@@ -80,7 +93,9 @@ export function PurchaseHistoryTable(props: Props) {
                   }}
                 >
                   {!isMarkedForDeletion && <DeleteIcon fontSize="inherit" />}
-                  {isMarkedForDeletion && <RestoreFromTrashIcon fontSize="inherit" />}
+                  {isMarkedForDeletion && (
+                    <RestoreFromTrashIcon fontSize="inherit" />
+                  )}
                 </IconButton>
               </TableCell>
             </TableRow>

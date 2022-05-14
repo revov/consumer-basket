@@ -1,15 +1,21 @@
+import type { Unit as _UnitType } from '@prisma/client';
+
+export type Unit = _UnitType;
+
 export interface CreateProductDto {
   name: string;
   price: number;
   promoPrice?: number;
   store: string;
   quantityInThePackage?: number;
+  unit: Unit;
   categoryId?: string;
   date: string;
 }
 
 export interface UpdateProductDto {
   name: string;
+  unit: Unit;
   history: ProductHistoryItem[];
 }
 
@@ -20,6 +26,7 @@ export interface ProductListItemDto {
   promoPrice: string | null;
   store: string;
   quantityInThePackage: number;
+  unit: Unit;
   date: string;
 }
 

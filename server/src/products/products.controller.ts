@@ -32,6 +32,7 @@ export class ProductsController {
         price: true,
         promoPrice: true,
         quantityInThePackage: true,
+        unit: true,
         store: true,
       },
       orderBy: [
@@ -70,6 +71,7 @@ export class ProductsController {
         promoPrice: dto.promoPrice,
         store: dto.store,
         quantityInThePackage: dto.quantityInThePackage,
+        unit: dto.unit,
         date: new Date(dto.date),
         categoryId: dto.categoryId,
         history: JSON.stringify([
@@ -98,6 +100,7 @@ export class ProductsController {
     return this.prisma.product.update({
       data: {
         name: dto.name,
+        unit: dto.unit,
         history: JSON.stringify(dto.history),
 
         price: lastPurchase.price,

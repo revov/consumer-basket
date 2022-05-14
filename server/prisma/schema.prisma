@@ -16,6 +16,15 @@ model Category {
   Product Product[]
 }
 
+enum Unit {
+  ITEM
+  KG
+  G
+  L
+  ML
+  PAIR
+}
+
 model Product {
   id                   String    @id @default(uuid())
   name                 String    @unique
@@ -23,6 +32,7 @@ model Product {
   promoPrice           Decimal?
   store                String
   quantityInThePackage Decimal   @default(1)
+  unit                 Unit      @default(ITEM)
   category             Category? @relation(fields: [categoryId], references: [id])
   categoryId           String?
   date                 DateTime  @db.Date
