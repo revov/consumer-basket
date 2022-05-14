@@ -21,12 +21,14 @@ export const UNIT_MAPPING_SINGULAR: typeof UNIT_MAPPING = {
 };
 
 export const QuantityRenderer = React.memo((props: Props) => {
+  const formattedQuantity =
+    props.quantity < 1 ? props.quantity.toFixed(3) : props.quantity;
   return (
     <>
-      {props.quantity}{" "}
-      {props.quantity === 1
+      {formattedQuantity}{" "}
+      {props.unit !== "ITEM" && (props.quantity === 1
         ? UNIT_MAPPING_SINGULAR[props.unit]
-        : UNIT_MAPPING[props.unit]}
+        : UNIT_MAPPING[props.unit])}
     </>
   );
 });

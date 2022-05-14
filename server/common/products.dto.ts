@@ -25,7 +25,7 @@ export interface ProductListItemDto {
   price: string;
   promoPrice: string | null;
   store: string;
-  quantityInThePackage: number;
+  quantityInThePackage: string;
   unit: Unit;
   date: string;
 }

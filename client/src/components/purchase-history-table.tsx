@@ -11,7 +11,7 @@ import { useMemo } from "react";
 import { ProductHistoryItem, Unit } from "../../../server/common/products.dto";
 import { CurrencyRenderer } from "./currency-renderer";
 import { DateRenderer } from "./date-renderer";
-import { QuantityRenderer } from "./quantity-renderer";
+import { QuantityRenderer, UNIT_MAPPING_SINGULAR } from "./quantity-renderer";
 
 interface Props {
   history: ProductHistoryItem[];
@@ -79,7 +79,7 @@ export function PurchaseHistoryTable(props: Props) {
                     (purchase.promoPrice ?? purchase.price) /
                     purchase.quantityInThePackage
                   }
-                />
+                /> за {UNIT_MAPPING_SINGULAR[props.unit]}
               </TableCell>
               <TableCell>{purchase.store}</TableCell>
               <TableCell></TableCell>

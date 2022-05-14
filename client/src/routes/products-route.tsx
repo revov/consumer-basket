@@ -74,7 +74,7 @@ export function ProductsRoute() {
                 </TableCell>
                 <TableCell>
                   <QuantityRenderer
-                    quantity={product.quantityInThePackage}
+                    quantity={+product.quantityInThePackage}
                     unit={product.unit}
                   />
                 </TableCell>
