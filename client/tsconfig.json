@@ -19,7 +19,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "./",	
-    "noImplicitAny": true,	
+    "noImplicitAny": false,	
     "noEmitOnError": false
   },
   "include": [
