@@ -6,15 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rimraf dist && rimraf client/build && npm run build --workspace=client && npm run build --workspace=server && npm run prisma:generate --workspace=server && npm run prisma:migrate --workspace=server",
+    "build": "rimraf dist && rimraf client/build && npm run prisma:generate --workspace=server && npm run build --workspace=client && npm run build --workspace=server && npm run prisma:migrate --workspace=server",
     "start:client": "npm start -w client",
     "start:server": "npm run start:dev -w server"
   },
   "workspaces": [
     "client",
     "server"
-  ],
-  "engines": {
-    "npm": "8.10.0"
-  }
+  ]
 }
