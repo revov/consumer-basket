@@ -16,7 +16,8 @@ import { QuantityRenderer, UNIT_MAPPING_SINGULAR } from "./quantity-renderer";
 interface Props {
   history: ProductHistoryItem[];
   unit: Unit;
-  purchasesForDeletion: ProductHistoryItem[];
+  purchasesForDeletion?: ProductHistoryItem[];
+  onRowClick?: (purchase: ProductHistoryItem) => void;
   onDelete: (purchase: ProductHistoryItem) => void;
 }
 
@@ -43,7 +44,7 @@ export function PurchaseHistoryTable(props: Props) {
       <TableBody>
         {sortedPurchases?.map((purchase, index) => {
           const isMarkedForDeletion =
-            props.purchasesForDeletion.includes(purchase);
+            props.purchasesForDeletion?.includes(purchase) ?? false;
 
           return (
             <TableRow
@@ -58,6 +59,7 @@ export function PurchaseHistoryTable(props: Props) {
                 },
               ]}
               hover
+              onClick={() => props.onRowClick?.(purchase)}
             >
               <TableCell>
                 <DateRenderer dateAsIso8601={purchase.date} />
@@ -80,7 +82,8 @@ export function PurchaseHistoryTable(props: Props) {
                     (purchase.promoPrice ?? purchase.price) /
                     purchase.quantityInThePackage
                   }
-                /> за {UNIT_MAPPING_SINGULAR[props.unit]}
+                />{" "}
+                за {UNIT_MAPPING_SINGULAR[props.unit]}
               </TableCell>
               <TableCell>{purchase.store}</TableCell>
               <TableCell>{purchase.description}</TableCell>

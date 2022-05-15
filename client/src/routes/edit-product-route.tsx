@@ -19,6 +19,14 @@ import {
 } from "../components/product-purchase-form";
 import { ProductHistoryItem, Unit } from "../../../server/common/products.dto";
 import { UnitSelector } from "src/components/inputs/unit-selector";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+import produce from "immer";
 
 export function EditProductRoute() {
   const { productId } = useParams();
@@ -29,50 +37,58 @@ export function EditProductRoute() {
 
   const [serverError, setServerError] = useState("");
 
-  const [productName, setProductName] = useState("");
-  const [productUnit, setProductUnit] = useState<Unit>("ITEM");
-  const [productPurchase, setProductPurchase] = useState<PurchaseFormState>({
-    price: null,
-    promoPrice: null,
-    quantityInThePackage: 1,
-    store: "",
-    date: startOfToday(),
-    description: '',
+  const [productFormState, setProductFormState] = useState<{
+    name: string;
+    unit: Unit;
+    history: ProductHistoryItem[];
+  }>({
+    name: "",
+    unit: "ITEM",
+    history: [],
   });
-  const [registerNewPurchase, setRegisterNewPurchase] = useState(false);
 
-  const [purchasesForDeletion, setPurchasesForDeletion] = useState<
-    ProductHistoryItem[]
-  >([]);
+  const [productPurchaseToEditIndex, setProductPurchaseToEditIndex] =
+    useState(-1);
+  const [productPurchaseToEdit, setProductPurchaseToEdit] =
+    useState<PurchaseFormState | null>(null);
+
+  const [registerNewPurchase, setRegisterNewPurchase] = useState(false);
+  const [newProductPurchase, setNewProductPurchase] =
+    useState<PurchaseFormState>({
+      price: null,
+      promoPrice: null,
+      quantityInThePackage: 1,
+      store: "",
+      date: startOfToday(),
+      description: "",
+    });
 
   useEffect(() => {
-    setProductName((prev) => existingProductQuery.data?.name ?? prev);
-    setProductUnit((prev) => existingProductQuery.data?.unit ?? prev);
+    if (existingProductQuery.data) {
+      setProductFormState({
+        name: existingProductQuery.data.name,
+        unit: existingProductQuery.data.unit,
+        history: existingProductQuery.data.history,
+      });
+    }
   }, [existingProductQuery.data]);
 
   const handleUpdate = async () => {
     try {
-      const history = [
-        ...(existingProductQuery.data?.history.filter(
-          (existingPurchase) => !purchasesForDeletion.includes(existingPurchase)
-        ) ?? []),
-      ];
-
-      if (registerNewPurchase) {
-        history.push({
-          ...productPurchase,
-          price: productPurchase.price ?? 0,
-          date: formatISO(productPurchase.date ?? startOfToday(), {
-            representation: "date",
-          }),
-        });
-      }
       await updateProductMutation.mutateAsync({
         productId: productId!,
         product: {
-          name: productName,
-          unit: productUnit,
-          history: history,
+          name: productFormState.name,
+          unit: productFormState.unit,
+          history: registerNewPurchase
+            ? [...productFormState.history, {
+                ...newProductPurchase,
+                price: newProductPurchase.price ?? 0,
+                date: formatISO(newProductPurchase.date ?? startOfToday(), {
+                  representation: "date",
+                }),
+              }]
+            : productFormState.history,
         },
       });
 
@@ -107,37 +123,52 @@ export function EditProductRoute() {
             <Grid item xs={12} sm={8}>
               <TextField
                 label="Име на продукта"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                value={productFormState.name}
+                onChange={(e) =>
+                  setProductFormState({
+                    ...productFormState,
+                    name: e.target.value,
+                  })
+                }
                 fullWidth
                 autoComplete="off"
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <UnitSelector
-                value={productUnit}
-                onChange={(unit) => setProductUnit(unit)}
+                value={productFormState.unit}
+                onChange={(unit) =>
+                  setProductFormState({
+                    ...productFormState,
+                    unit,
+                  })
+                }
               />
             </Grid>
 
             <Grid item xs={12}>
               <PurchaseHistoryTable
-                history={existingProductQuery.data.history ?? []}
-                unit={productUnit}
-                purchasesForDeletion={purchasesForDeletion}
-                onDelete={(purchaseForDeletion) =>
-                  setPurchasesForDeletion((prev) => {
-                    const result = prev.filter(
-                      (prevPurchase) => prevPurchase !== purchaseForDeletion
-                    );
+                history={productFormState.history}
+                unit={productFormState.unit}
+                onRowClick={(clickedPurchase) => {
+                  setProductPurchaseToEditIndex(
+                    productFormState.history.findIndex(
+                      (p) => p === clickedPurchase
+                    )
+                  );
+                  setProductPurchaseToEdit({
+                    ...clickedPurchase,
+                    date: new Date(clickedPurchase.date),
+                  });
+                }}
+                onDelete={(purchaseForDeletion) => {
+                  const history = productFormState.history.filter(
+                    (existingPurchase) =>
+                      existingPurchase !== purchaseForDeletion
+                  );
 
-                    if (result.length < prev.length) {
-                      return result;
-                    } else {
-                      return [...prev, purchaseForDeletion];
-                    }
-                  })
-                }
+                  setProductFormState({ ...productFormState, history });
+                }}
               />
             </Grid>
 
@@ -156,8 +187,8 @@ export function EditProductRoute() {
             {registerNewPurchase && (
               <Grid item xs={12}>
                 <ProductPurchaseForm
-                  value={productPurchase}
-                  onChange={setProductPurchase}
+                  value={newProductPurchase}
+                  onChange={setNewProductPurchase}
                 />
               </Grid>
             )}
@@ -175,6 +206,52 @@ export function EditProductRoute() {
           </Grid>
         </form>
       )}
+
+      <Dialog
+        open={!!productPurchaseToEdit}
+        maxWidth="lg"
+        transitionDuration={0}
+      >
+        <DialogTitle>Редактиране на покупка</DialogTitle>
+        <DialogContent sx={{ overflow: "visible" }}>
+          {productPurchaseToEdit && (
+            <ProductPurchaseForm
+              value={productPurchaseToEdit}
+              onChange={setProductPurchaseToEdit}
+            />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setProductPurchaseToEdit(null)}>Отказ</Button>
+          <Button
+            onClick={() => {
+              const updatedHistory = produce(
+                productFormState.history,
+                (draft) => {
+                  draft[productPurchaseToEditIndex] = {
+                    ...productPurchaseToEdit!,
+                    price: productPurchaseToEdit!.price ?? 0,
+                    date: formatISO(
+                      productPurchaseToEdit!.date ?? startOfToday(),
+                      {
+                        representation: "date",
+                      }
+                    ),
+                  };
+                }
+              );
+              setProductFormState({
+                ...productFormState,
+                history: updatedHistory,
+              });
+              setProductPurchaseToEdit(null);
+            }}
+            autoFocus
+          >
+            Ок
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }
