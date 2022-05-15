@@ -31,7 +31,7 @@ export function ProductsRoute() {
   >(undefined);
 
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
       <Button
         variant="contained"
         startIcon={<AddIcon />}
@@ -40,13 +40,17 @@ export function ProductsRoute() {
       >
         Нов продукт
       </Button>
-      <TableContainer component={Paper} sx={{ minWidth: 650, maxHeight: 800 }}>
+      <TableContainer component={Paper} sx={{ minWidth: 650 }}>
         <Table stickyHeader>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{'.MuiTableCell-root': { fontWeight: "bold" }}}>
               <TableCell>Продукт</TableCell>
-              <TableCell align="right">Цена</TableCell>
-              <TableCell align="right">Промо цена</TableCell>
+              <TableCell align="right">
+                Цена
+              </TableCell>
+              <TableCell align="right">
+                Промо цена
+              </TableCell>
               <TableCell>Кол. в опакова</TableCell>
               <TableCell>Магазин</TableCell>
               <TableCell>Категория</TableCell>
