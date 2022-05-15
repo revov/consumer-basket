@@ -18,6 +18,7 @@ export interface PurchaseFormState {
   quantityInThePackage: number;
   store: string;
   date: Date;
+  description?: string;
 }
 
 export function ProductPurchaseForm(props: Props) {
@@ -74,7 +75,7 @@ export function ProductPurchaseForm(props: Props) {
             props.onChange({ ...props.value, promoPrice: v }),
           )}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={2}>
           <TextField
             label="Количество в опаковка"
             value={props.value.quantityInThePackage}
@@ -91,12 +92,25 @@ export function ProductPurchaseForm(props: Props) {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             label="Магазин"
+            name='purchase-store'
             value={props.value.store}
             onChange={(e) =>
               props.onChange({ ...props.value, store: e.target.value })
+            }
+            fullWidth
+            autoComplete="on"
+            size="small"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Описание"
+            value={props.value.description}
+            onChange={(e) =>
+              props.onChange({ ...props.value, description: e.target.value })
             }
             fullWidth
             autoComplete="off"

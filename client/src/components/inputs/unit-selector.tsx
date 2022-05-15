@@ -25,15 +25,15 @@ export function UnitSelector(props: Props) {
         <MenuItem key={"KG" as Unit} value={"KG" as Unit}>
           {UNIT_MAPPING_SINGULAR.KG}
         </MenuItem>
-        <MenuItem key={"G" as Unit} value={"G" as Unit}>
+        {/* <MenuItem key={"G" as Unit} value={"G" as Unit}>
           {UNIT_MAPPING_SINGULAR.G}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem key={"L" as Unit} value={"L" as Unit}>
           {UNIT_MAPPING_SINGULAR.L}
         </MenuItem>
-        <MenuItem key={"ML" as Unit} value={"ML" as Unit}>
+        {/* <MenuItem key={"ML" as Unit} value={"ML" as Unit}>
           {UNIT_MAPPING_SINGULAR.ML}
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem key={"PAIR" as Unit} value={"PAIR" as Unit}>
           {UNIT_MAPPING_SINGULAR.PAIR}
         </MenuItem>

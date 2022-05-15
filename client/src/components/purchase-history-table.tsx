@@ -36,6 +36,7 @@ export function PurchaseHistoryTable(props: Props) {
           <TableCell>Кол. в опаковка</TableCell>
           <TableCell align="right">Ед. цена</TableCell>
           <TableCell>Магазин</TableCell>
+          <TableCell width={200}>Описание</TableCell>
           <TableCell></TableCell>
         </TableRow>
       </TableHead>
@@ -82,6 +83,7 @@ export function PurchaseHistoryTable(props: Props) {
                 /> за {UNIT_MAPPING_SINGULAR[props.unit]}
               </TableCell>
               <TableCell>{purchase.store}</TableCell>
+              <TableCell>{purchase.description}</TableCell>
               <TableCell></TableCell>
 
               <TableCell>

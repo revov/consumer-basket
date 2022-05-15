@@ -37,6 +37,7 @@ export function EditProductRoute() {
     quantityInThePackage: 1,
     store: "",
     date: startOfToday(),
+    description: '',
   });
   const [registerNewPurchase, setRegisterNewPurchase] = useState(false);
 

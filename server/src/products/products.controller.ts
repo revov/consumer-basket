@@ -81,6 +81,7 @@ export class ProductsController {
             store: dto.store,
             quantityInThePackage: dto.quantityInThePackage,
             date: dto.date,
+            description: dto.description,
           },
         ] as ProductHistoryItem[]),
       },

@@ -11,6 +11,7 @@ export interface CreateProductDto {
   unit: Unit;
   categoryId?: string;
   date: string;
+  description?: string;
 }
 
 export interface UpdateProductDto {
@@ -43,4 +44,5 @@ export interface ProductHistoryItem {
   store: string;
   quantityInThePackage: number;
   date: string;
+  description?: string;
 }

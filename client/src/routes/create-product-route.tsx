@@ -22,6 +22,7 @@ interface ProductFormState {
   unit: Unit;
   store: string;
   date: Date;
+  description?: string;
 }
 
 export function CreateProductRoute() {
@@ -39,6 +40,7 @@ export function CreateProductRoute() {
     unit: "ITEM",
     store: "",
     date: startOfToday(),
+    description: '',
   });
 
   const handleCreate = async () => {
@@ -53,6 +55,7 @@ export function CreateProductRoute() {
         date: formatISO(productFormState.date ?? startOfToday(), {
           representation: "date",
         }),
+        description: productFormState.description,
       });
 
       navigate("/products");
