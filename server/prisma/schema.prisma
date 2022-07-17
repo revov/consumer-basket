@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Category {
-  id      String    @id @default(uuid())
-  name    String
-  Product Product[]
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  products    Product[]
 }
 
 enum Unit {
@@ -26,17 +27,16 @@ enum Unit {
 }
 
 model Product {
-  id                   String    @id @default(uuid())
-  name                 String    @unique
+  id                   String     @id @default(uuid())
+  name                 String     @unique
   price                Decimal
   promoPrice           Decimal?
   store                String
-  quantityInThePackage Decimal   @default(1)
-  unit                 Unit      @default(ITEM)
-  category             Category? @relation(fields: [categoryId], references: [id])
-  categoryId           String?
-  date                 DateTime  @db.Date
+  quantityInThePackage Decimal    @default(1)
+  unit                 Unit       @default(ITEM)
+  categories           Category[]
+  date                 DateTime   @db.Date
   history              Json
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @default(now()) @updatedAt
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @default(now()) @updatedAt
 }

@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { join } from 'path';
 import { PrismaService } from './prisma.service';
 import { ProductsController } from './products/products.controller';
+import { CategoriesController } from './categories/categories.controller';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { ProductsController } from './products/products.controller';
     }),
     AuthModule,
   ],
-  controllers: [ProductsController],
+  controllers: [ProductsController, CategoriesController],
   providers: [PrismaService],
 })
 export class AppModule {}

@@ -51,7 +51,7 @@ export function ProductsRoute() {
               <TableCell align="right">
                 Промо цена
               </TableCell>
-              <TableCell>Кол. в опакова</TableCell>
+              <TableCell>Кол. в опаковка</TableCell>
               <TableCell>Магазин</TableCell>
               <TableCell>Категория</TableCell>
               <TableCell>Дата</TableCell>

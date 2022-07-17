@@ -73,7 +73,6 @@ export class ProductsController {
         quantityInThePackage: dto.quantityInThePackage,
         unit: dto.unit,
         date: new Date(dto.date),
-        categoryId: dto.categoryId,
         history: JSON.stringify([
           {
             price: dto.price,
