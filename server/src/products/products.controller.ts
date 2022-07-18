@@ -49,14 +49,16 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getProduct(@Param('id') id: string) {
-    const product = await this.prisma.product.findUnique({
+    const { categories, ...product } = await this.prisma.product.findUnique({
       where: {
         id: id,
       },
+      include: { categories: { select: { id: true } } },
     });
 
     return {
       ...product,
+      categoryIds: categories.map((c) => c.id),
       history: JSON.parse(product.history.toString() || '[]'),
     };
   }
@@ -83,6 +85,9 @@ export class ProductsController {
             description: dto.description,
           },
         ] as ProductHistoryItem[]),
+        categories: {
+          connect: dto.categoryIds.map((c) => ({ id: c })),
+        },
       },
     });
   }
@@ -101,6 +106,9 @@ export class ProductsController {
       data: {
         name: dto.name,
         unit: dto.unit,
+        categories: {
+          set: dto.categoryIds.map((c) => ({ id: c })),
+        },
         history: JSON.stringify(dto.history),
 
         price: lastPurchase.price,

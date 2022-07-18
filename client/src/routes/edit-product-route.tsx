@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import produce from "immer";
+import { CategoriesSelector } from "src/components/inputs/categories-selector";
 
 export function EditProductRoute() {
   const { productId } = useParams();
@@ -39,10 +40,12 @@ export function EditProductRoute() {
   const [productFormState, setProductFormState] = useState<{
     name: string;
     unit: Unit;
+    categoryIds: string[];
     history: ProductHistoryItem[];
   }>({
     name: "",
     unit: "ITEM",
+    categoryIds: [],
     history: [],
   });
 
@@ -67,6 +70,7 @@ export function EditProductRoute() {
       setProductFormState({
         name: existingProductQuery.data.name,
         unit: existingProductQuery.data.unit,
+        categoryIds: existingProductQuery.data.categoryIds,
         history: existingProductQuery.data.history,
       });
     }
@@ -79,14 +83,18 @@ export function EditProductRoute() {
         product: {
           name: productFormState.name,
           unit: productFormState.unit,
+          categoryIds: productFormState.categoryIds,
           history: registerNewPurchase
-            ? [...productFormState.history, {
-                ...newProductPurchase,
-                price: newProductPurchase.price ?? 0,
-                date: formatISO(newProductPurchase.date ?? startOfToday(), {
-                  representation: "date",
-                }),
-              }]
+            ? [
+                ...productFormState.history,
+                {
+                  ...newProductPurchase,
+                  price: newProductPurchase.price ?? 0,
+                  date: formatISO(newProductPurchase.date ?? startOfToday(), {
+                    representation: "date",
+                  }),
+                },
+              ]
             : productFormState.history,
         },
       });
@@ -141,6 +149,15 @@ export function EditProductRoute() {
                     ...productFormState,
                     unit,
                   })
+                }
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <CategoriesSelector
+                value={productFormState.categoryIds}
+                onChange={(e) =>
+                  setProductFormState({ ...productFormState, categoryIds: e })
                 }
               />
             </Grid>

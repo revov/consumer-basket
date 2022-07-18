@@ -9,7 +9,7 @@ export interface CreateProductDto {
   store: string;
   quantityInThePackage?: number;
   unit: Unit;
-  categoryId?: string;
+  categoryIds?: string[];
   date: string;
   description?: string;
 }
@@ -17,6 +17,7 @@ export interface CreateProductDto {
 export interface UpdateProductDto {
   name: string;
   unit: Unit;
+  categoryIds?: string[];
   history: ProductHistoryItem[];
 }
 
@@ -35,7 +36,7 @@ export interface ProductDto extends ProductListItemDto {
   history: ProductHistoryItem[];
   createdAt: string;
   updatedAt: string;
-  //category?
+  categoryIds: string[];
 }
 
 export interface ProductHistoryItem {

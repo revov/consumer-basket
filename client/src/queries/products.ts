@@ -33,6 +33,7 @@ export function useProductQuery(productId: string | undefined) {
         if (cachedProductListItem) {
           return {
             ...cachedProductListItem,
+            categoryIds: [],
             createdAt: '',
             updatedAt: '',
             history: [],

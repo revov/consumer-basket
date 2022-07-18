@@ -42,7 +42,7 @@ export function CategoriesRoute() {
         sx={{ marginBottom: "10px" }}
         onClick={() => navigate("create")}
       >
-        Нов продукт
+        Нова категория
       </Button>
       <TableContainer component={Paper} sx={{ minWidth: 650 }}>
         <Table stickyHeader>

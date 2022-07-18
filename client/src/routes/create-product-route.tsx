@@ -13,6 +13,7 @@ import { ProductPurchaseForm } from "src/components/product-purchase-form";
 import Paper from "@mui/material/Paper";
 import { Unit } from "../../../server/common/products.dto";
 import { UnitSelector } from "src/components/inputs/unit-selector";
+import { CategoriesSelector } from "src/components/inputs/categories-selector";
 
 interface ProductFormState {
   name: string;
@@ -20,6 +21,7 @@ interface ProductFormState {
   promoPrice: number | null;
   quantityInThePackage: number;
   unit: Unit;
+  categoryIds: string[];
   store: string;
   date: Date;
   description?: string;
@@ -38,9 +40,10 @@ export function CreateProductRoute() {
     promoPrice: null,
     quantityInThePackage: 1,
     unit: "ITEM",
+    categoryIds: [],
     store: "",
     date: startOfToday(),
-    description: '',
+    description: "",
   });
 
   const handleCreate = async () => {
@@ -52,6 +55,7 @@ export function CreateProductRoute() {
         store: productFormState.store,
         quantityInThePackage: productFormState.quantityInThePackage,
         unit: productFormState.unit,
+        categoryIds: productFormState.categoryIds,
         date: formatISO(productFormState.date ?? startOfToday(), {
           representation: "date",
         }),
@@ -108,6 +112,15 @@ export function CreateProductRoute() {
                   ...productFormState,
                   unit,
                 })
+              }
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <CategoriesSelector
+              value={productFormState.categoryIds}
+              onChange={(e) =>
+                setProductFormState({ ...productFormState, categoryIds: e })
               }
             />
           </Grid>
