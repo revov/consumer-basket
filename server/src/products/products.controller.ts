@@ -34,6 +34,7 @@ export class ProductsController {
         quantityInThePackage: true,
         unit: true,
         store: true,
+        categories: true,
       },
       orderBy: [
         {

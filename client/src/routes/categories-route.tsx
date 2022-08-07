@@ -36,14 +36,17 @@ export function CategoriesRoute() {
         alignItems: "flex-start",
       }}
     >
-      <Button
-        variant="contained"
-        startIcon={<AddIcon />}
-        sx={{ marginBottom: "10px" }}
-        onClick={() => navigate("create")}
-      >
-        Нова категория
-      </Button>
+      <Paper elevation={0} sx={{ p: { xs: 1 }, width: "100%" }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          sx={{ marginBottom: "10px" }}
+          onClick={() => navigate("create")}
+        >
+          Нова категория
+        </Button>
+      </Paper>
+
       <TableContainer component={Paper} sx={{ minWidth: 650 }}>
         <Table stickyHeader>
           <TableHead>

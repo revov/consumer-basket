@@ -1,4 +1,5 @@
 import type { Unit as _UnitType } from '@prisma/client';
+import { CategoryDto } from './categories.dto';
 
 export type Unit = _UnitType;
 
@@ -30,6 +31,7 @@ export interface ProductListItemDto {
   quantityInThePackage: string;
   unit: Unit;
   date: string;
+  categories: CategoryDto[];
 }
 
 export interface ProductDto extends ProductListItemDto {
