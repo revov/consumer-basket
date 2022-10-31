@@ -19,7 +19,11 @@ export class CategoriesController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getCategories() {
-    return this.prisma.category.findMany();
+    return this.prisma.category.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
   }
 
   @UseGuards(JwtAuthGuard)
