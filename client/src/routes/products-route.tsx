@@ -11,7 +11,8 @@ import TableRow from "@mui/material/TableRow";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Grid";
-import { useNavigate } from "react-router-dom";
+import isEmpty from "lodash/isEmpty";
+import { useLocation, useNavigate } from "react-router-dom";
 import { DateRenderer } from "../components/date-renderer";
 import {
   useDeleteProductMutation,
@@ -23,16 +24,21 @@ import { CurrencyRenderer } from "../components/currency-renderer";
 import { QuantityRenderer } from "src/components/quantity-renderer";
 import { CategoriesSelector } from "src/components/inputs/categories-selector";
 
+const URL_PARAM_CATEGORY_IDS = 'categoryIds';
+
 export function ProductsRoute() {
   const { data: products } = useProductsQuery();
   const deleteProductMutation = useDeleteProductMutation();
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const categoriesFilter = useMemo(
+    () => new URLSearchParams(search).getAll(URL_PARAM_CATEGORY_IDS),
+    [search]
+  );
 
   const [productForDeletion, setProductForDeletion] = useState<
     undefined | ProductListItemDto
   >(undefined);
-
-  const [categoriesFilter, setCategoriesFilter] = useState<string[]>([]);
 
   const filteredProducts = useMemo(() => {
     if (categoriesFilter.length === 0) {
@@ -52,10 +58,7 @@ export function ProductsRoute() {
         alignItems: "flex-start",
       }}
     >
-      <Paper
-        elevation={0}
-        sx={{ p: { xs: 1 }, width: '100%' }}
-      >
+      <Paper elevation={0} sx={{ p: { xs: 1 }, width: "100%" }}>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <Button
@@ -71,7 +74,17 @@ export function ProductsRoute() {
           <Grid item xs={4}>
             <CategoriesSelector
               value={categoriesFilter}
-              onChange={(e) => setCategoriesFilter(e)}
+              onChange={(e) => {
+                if (isEmpty(e)) {
+                  navigate({ search: "" });
+                } else {
+                  navigate({
+                    search: `?${new URLSearchParams(
+                      e.map((id) => [URL_PARAM_CATEGORY_IDS, id])
+                    )}`,
+                  });
+                }
+              }}
             />
           </Grid>
         </Grid>
